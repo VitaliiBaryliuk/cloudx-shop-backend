@@ -19,7 +19,10 @@ service: product-service
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 frameworkVersion: '3'
-
+custom:
+  webpack:
+    includeModules:
+      packagePath: '../package.json'    
 provider:
   name: aws
   runtime: nodejs12.x
@@ -27,6 +30,30 @@ provider:
     cors:
       allowedOrigins:
         - https://d3nui0d4pbm0dk.cloudfront.net
+  environment:
+    PRODUCTS_TABLE: CloudX_Products
+    STOCKS_TABLE: CloudX_Stocks
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:eu-west-3:233065634700:table/CloudX_Products"
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:eu-west-3:233065634700:table/CloudX_Stocks"        
 
 # you can overwrite defaults here
   stage: dev
@@ -61,7 +88,9 @@ provider:
 #    - '!exclude-me-dir/**'
 #    - include-me.js
 #    - include-me-dir/**
-
+# plugins:
+#   - serverless-plugin-common-excludes
+#   - serverless-plugin-include-dependencies
 functions:
   getProductsList:
     handler: handlers/getProductsList.handler
@@ -74,7 +103,13 @@ functions:
     events:
       - httpApi:
           path: /products/{productId}
-          method: get	      
+          method: get
+  createProduct:
+    handler: handlers/createProduct.handler
+    events:
+      - httpApi:
+          path: /products
+          method: post
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

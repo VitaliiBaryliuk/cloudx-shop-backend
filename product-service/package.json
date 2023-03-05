@@ -1,0 +1,29 @@
+{
+  "name": "cloudx-shop-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VitaliiBaryliuk/cloudx-shop-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VitaliiBaryliuk/cloudx-shop-backend/issues"
+  },
+  "homepage": "https://github.com/VitaliiBaryliuk/cloudx-shop-backend#readme",
+  "devDependencies": {
+    "@types/node": "^18.14.1",
+    "serverless-plugin-include-dependencies": "^5.0.0"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "aws-sdk": "^2.1325.0",
+    "serverless-plugin-common-excludes": "^4.0.0",
+    "uuid": "^9.0.0"
+  }
+}
