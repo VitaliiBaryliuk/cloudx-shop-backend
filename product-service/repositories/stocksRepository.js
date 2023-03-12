@@ -16,8 +16,7 @@ class StocksRepository {
           product_id: productId 
         }
       }).promise();
-      if (!stock.Item) throw Error('Stock not found');
-      return stock.Item;
+      return stock.Item ?? null;
     } catch (error) {
       throw Error(error)
     }

@@ -3,7 +3,7 @@
 const { v4: uuidv4 } = require('uuid');
 
 const productsRepository = require('../repositories/productsRepository');
-const validate = require('../halpers/validate');
+const validate = require('../helpers/validate');
 
 const productValidationSchema = {
   type: "object",

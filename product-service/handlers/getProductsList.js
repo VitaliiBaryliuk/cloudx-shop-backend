@@ -11,7 +11,7 @@ module.exports.handler = async (event) => {
       const stock = await stocksRepository.getStockByProductId(products[i].id);
       productsWithStock.push({
         ...products[i],
-        count: stock.count
+        count: stock?.count ?? null
       })
     }
     return {
@@ -19,6 +19,7 @@ module.exports.handler = async (event) => {
       body: JSON.stringify(productsWithStock) 
     };
   } catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
       body: error
