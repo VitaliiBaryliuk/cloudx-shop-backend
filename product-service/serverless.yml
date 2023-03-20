@@ -10,6 +10,8 @@ provider:
   environment:
     PRODUCTS_TABLE: CloudX_Products
     STOCKS_TABLE: CloudX_Stocks
+    SNS_REGION: eu-west-3
+    SNS_TOPIC_ARN: !Ref productsDBUpdated
   iam:
     role:
       statements:
@@ -30,7 +32,17 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: "arn:aws:dynamodb:eu-west-3:233065634700:table/CloudX_Stocks"        
+          Resource: "arn:aws:dynamodb:eu-west-3:233065634700:table/CloudX_Stocks"
+        - Effect: Allow
+          Action:
+            - sqs:CreateQueue
+            - sqs:ReceiveMessage
+          Resource: 
+            Fn::GetAtt: [ catalogItemsQueue, Arn ]
+        - Effect: "Allow"
+          Resource: "*"
+          Action:
+            - "sns:*"            
   stage: dev
   region: eu-west-3
 functions:
@@ -52,3 +64,27 @@ functions:
       - httpApi:
           path: /products
           method: post
+  catalogBatchProcess:
+    handler: handlers/catalogBatchProcess.handler
+    events:
+      - sqs:
+          arn: arn:aws:sqs:eu-west-3:233065634700:catalogItemsQueue
+          batchSize: 5
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    productsDBUpdated:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: productsDBUpdated
+    productsDBUpdatedTopicSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: vitaliibaryliuk@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: productsDBUpdated
+

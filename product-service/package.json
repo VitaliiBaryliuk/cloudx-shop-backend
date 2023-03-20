@@ -21,8 +21,9 @@
     "serverless-plugin-include-dependencies": "^5.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.295.0",
     "ajv": "^8.12.0",
-    "aws-sdk": "^2.1325.0",
+    "aws-sdk": "^2.1338.0",
     "serverless-plugin-common-excludes": "^4.0.0",
     "uuid": "^9.0.0"
   }

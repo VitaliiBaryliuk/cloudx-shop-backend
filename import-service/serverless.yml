@@ -1,0 +1,45 @@
+service: import-service
+frameworkVersion: '3'
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: eu-west-3
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://d3nui0d4pbm0dk.cloudfront.net
+  environment:
+    BUCKET_REGION: eu-west-3
+    BUCKET: "cloudx-course"
+    QUEUE_URL: "https://sqs.eu-west-3.amazonaws.com/233065634700/catalogItemsQueue"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource: "arn:aws:sqs:eu-west-3:233065634700:catalogItemsQueue"
+functions:
+  importProductsFile:
+    handler: handlers/importProductsFile.handler
+    events:
+      - httpApi:
+          path: /import
+          method: get
+  importFileParser:
+    handler: handlers/importFileParser.handler
+    events:
+    - s3:
+        bucket: cloudx-course
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: uploaded/
+        existing: true          
+ 
