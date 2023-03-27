@@ -11,6 +11,7 @@ const productValidationSchema = {
     title: { type: "string" },
     description: { type: "string" },
     price: { type: "integer" },
+    count: { type: "integer" },
   },
   required: ['title', 'description', 'price'],
   additionalProperties: false,
