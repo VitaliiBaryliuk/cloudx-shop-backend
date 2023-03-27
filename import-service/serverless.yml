@@ -30,9 +30,11 @@ functions:
   importProductsFile:
     handler: handlers/importProductsFile.handler
     events:
-      - httpApi:
+      - http:
           path: /import
           method: get
+          cors: true
+          authorizer: arn:aws:lambda:eu-west-3:233065634700:function:authorization-service-dev-basicAuthorizer
   importFileParser:
     handler: handlers/importFileParser.handler
     events:
@@ -41,5 +43,15 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: uploaded/
-        existing: true          
- 
+        existing: true
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

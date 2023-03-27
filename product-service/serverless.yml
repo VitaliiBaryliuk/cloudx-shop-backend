@@ -62,8 +62,8 @@ functions:
     handler: handlers/createProduct.handler
     events:
       - httpApi:
-          path: /products
-          method: post
+          path: /product
+          method: put
   catalogBatchProcess:
     handler: handlers/catalogBatchProcess.handler
     events:
